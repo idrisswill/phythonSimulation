@@ -1,5 +1,5 @@
 import time
-
+from functions import non_graphical_function, graphic_function
 import matplotlib.pyplot as plt
 import pygame
 import math
@@ -16,8 +16,8 @@ WIDTH, HEIGHT = 1280, 960
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('monte Carlo Simulation')
 
-origine_position = (25, HEIGHT - 25)
-graduation_interval = 100
+ORIGIN_COORDINATE = (25, HEIGHT - 25)
+GRADUATION_INTERVAL = 100
 array_of_points = np.zeros((100, 2), dtype=int)
 font = pygame.font.Font('freesansbold.ttf', 32)
 white = (255, 255, 255)
@@ -25,41 +25,14 @@ green = (0, 255, 0)
 blue = (0, 0, 128)
 
 
-def calculate_distance(p1, p2):
-    return math.sqrt((p2[1] - p1[1]) ** 2 + (p2[0] - p1[0]) ** 2)
 
 
-def draw_repere(center=origine_position):
-    global origine_position
-    global graduation_interval
-    origine_position = center
-    pygame.draw.line(window, "red", (center[0], 0), (center[0], HEIGHT), 2)
-    pygame.draw.line(window, "blue", (0, center[1]), (WIDTH, center[1]), 2)
-    x = 0
-    # draw graduation
-    while x < HEIGHT - center[0]:
-        x += graduation_interval
-        pygame.draw.line(window, "red", (center[0] + 5, center[1] - x), (center[0] - 5, (center[1] - x)), 1)
-        pygame.draw.line(window, "blue", (center[0] + x, center[1] - 5), (center[0] + x, (center[1] + 5)), 1)
 
 
-def draw_points(array_of_points):
-    for point in array_of_points:
-        pygame.draw.line(window, 'orange', tuple(point), tuple(point))
 
 
-def draw_square_and_circle(rayon):
-    '''
 
-    :param rayon: it is an integer for multiply graduation interval
-    :return: void
-    '''
-    global origine_position
-    global graduation_interval
-    large = rayon * graduation_interval
-    square = pygame.Rect(origine_position[0], origine_position[1] - large, large, large)
-    pygame.draw.rect(window, "green", square, 1)
-    pygame.draw.circle(window, 'yellow', origine_position, large, 1)
+
 
 
 def game(window, width, height, array_length, epocs, origine_coordinate, size_of_square):
@@ -159,7 +132,7 @@ def mesure_run_time_draw_point(nbr_point):
 if __name__ == "__main__":
     # run(window, WIDTH, HEIGHT, 100000)
     core.chrono_start()
-    game(window,WIDTH, HEIGHT, 100000,200,origine_position,500)
+    game(window,WIDTH, HEIGHT, 10000,200,origine_position,500)
     core.chrono_show()
     # iter_number = 1
     # number_of_points = range(1000, 1000000, 1000)
