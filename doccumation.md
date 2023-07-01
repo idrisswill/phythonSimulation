@@ -262,13 +262,13 @@ Let $ABCD$ a **square** side $a$, and $\left(\mathscr C\right)$ the **circle** c
 radius $r = a$ (i.e. a quarter of the circle is inscribed in the square).\ If we randomly and 
 uniformly throw dots on the $ABCD$ square, then the proportion of points belonging to the *quarter* 
 circle $\left(\mathscr C\right)$ written in $ABCD$ is proportional to its area
-$\mathscr A_\text{quartDisque} = \dfract{\pi r^2}{4}$.\
+$\mathscr A_\text{quartDisque} = \dfrac{\pi r^2}{4}$.\
 c'est a dire:\
-$\dfract{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfract{A_\text{quartDisque}}{A_\text{square}} $\
-$\dfract{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfract{\dfract{\pi r^2}{4}}{r^2}$
-$\dfract{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \left(\dfract{\pi r^2}{4}\right) \times \left(\dfract{1}{r^2}\right)$
-$\dfract{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfract{\pi}{4}$
-$\pi ≃ \dfract{4 \times N_\text{PointsOnTheCircle}}{N_\text{total}}$
+$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfrac{A_\text{quartDisque}}{A_\text{square}} $\
+$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfrac{\dfrac{\pi r^2}{4}}{r^2}$
+$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \left(\dfrac{\pi r^2}{4}\right) \times \left(\dfrac{1}{r^2}\right)$
+$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfrac{\pi}{4}$
+$\pi ≃ \dfrac{4 \times N_\text{PointsOnTheCircle}}{N_\text{total}}$
 
 ## Running the tests
 
