@@ -254,12 +254,22 @@ And at runtime, the output looks like this:
 ![image info](./images/points.png)
 
 The next action is to count the dots inside the circle and color them differently.\
-Why do we have to do this? Well remember that we want to estimate the value of the number pi and to do this,
+Why do we have to do this?\
+Well remember that we want to estimate the value of the number pi and to do this,
 A little gymnastics is required:
 
+Let $ABCD$ a **square** side $a$, and $\left(\mathscr C\right)$ the **circle** center **C** and 
+radius $r = a$ (i.e. a quarter of the circle is inscribed in the square).\ If we randomly and 
+uniformly throw dots on the $ABCD$ square, then the proportion of points belonging to the *quarter* 
+circle $\left(\mathscr C\right)$ written in $ABCD$ is proportional to its area
+$\mathscr A_\text{quart_disque} = \dfract{\pi r^2}{4}$.\
+c'est a dire:\
+$\dfract{N_\text{Points_on_the_circle}}{N_\text{total}} ≃ \dfract{A_\text{quart_disque}}{A_\text{square}} $\
+$\dfract{N_\text{Points_on_the_circle}}{N_\text{total}} ≃ \dfract{\dfract{\pi r^2}{4}}{r^2}$
+$\dfract{N_\text{Points_on_the_circle}}{N_\text{total}} ≃ \left(\dfract{\pi r^2}{4}\right) \times \left(\dfract{1}{r^2}\right)$
+$\dfract{N_\text{Points_on_the_circle}}{N_\text{total}} ≃ \dfract{\pi}{4}$
+$\pi ≃ \dfract{4 \times N_\text{Points_on_the_circle}}{N_\text{total}}$
 
-When $a \ne 0$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are \
-$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 ## Running the tests
 
 Remember this is a showcase, thus your potential employer might want to see an automated test-suite of some kind up running.
