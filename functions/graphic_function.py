@@ -15,14 +15,19 @@ def draw_coordinate_system(origin_coordinate, graduation_interval, window):
                          (origin_coordinate[0] + x, (origin_coordinate[1] + 5)), 1)
 
 
-def draw_points(array_of_points, window):
+def draw_points(array_of_points, is_in_circle, window):
     '''
         :param array_of_points: the array of coordinates of the points to draw
+        :param is_in_circle: the array of boolean to know if point is in circle
         :param window: window where we can draw
         :return: void
         '''
-    for point in array_of_points:
-        pygame.draw.line(window, 'orange', tuple(point), tuple(point))
+    for idx, x in enumerate(array_of_points):
+        if is_in_circle[idx] == 0:
+            pygame.draw.line(window, 'green', tuple(x), tuple(x))
+        else:
+            pygame.draw.line(window, 'orange', tuple(x), tuple(x))
+
 
 
 def draw_square_and_circle(radius, center, window):
