@@ -19,6 +19,11 @@ we simply want to show how to parallelize one or more repetitive tasks in order 
 * *Initial work* - [python simulation](https://github.com/idrisswill/phythonSimulation) (Repository space)
 * *My professional profile on* [LinkedIn](https://www.linkedin.com/in/idriss-tchoupe-tafo-56864223a/)
 
+## Supervisor
+
+**Tomas Sabaliauskas** 
+* professional profile on* [Research Gate](https://www.researchgate.net/profile/Tomas-Sabaliauskas/)
+
 ## Showcase
 
 The project will be carried out as follows:
@@ -29,6 +34,7 @@ The project will be carried out as follows:
   * Orthonormed and graduated coordinate system
   * Circle inscribed in the square
   * Draw points
+  * Optimization
 * .
 * .
 * .
@@ -69,7 +75,7 @@ If you have an NVIDIA graphics card and the drivers are properly installed, you 
 
 Now, it is a question for us to draw a graphical interface that will allow us to have a visual feedback of our work. Obviously, this interface will not be useful to us for long. After seeing the basis of our analysis, we will no longer need an interface.
 
-### 1)  Orthonormed and graduated coordinate system
+### 1)  Orthonormed and graduated coordinate system ⛥
 
 In order to make our project modular, let's start by creating a subdirectory named *functions*🔧. In this directory we will define all the functions that will be useful to us. These functions will be separated into two files: *Graphic_function.py* and *Non-graphical_function.py*
 ```sh
@@ -136,7 +142,7 @@ if __name__ == "__main__":
 By executing the main file *monteCarlo.py*, we normally have something that looks like this image for illustration
 ![image info](./images/repere.png)
 
-### 2)  Circle inscribed in the square
+### 2)  Circle inscribed in the square ⛥
 
 For the rest, it is a question for us to draw a circle inscribed in a square. As we are called to use this figure
 an infinite number of times, it would be more accurate for us to define a function for this task.\
@@ -164,7 +170,7 @@ So if we call on our new function in our main file like thhis, **graphic_functio
 
 ![image info](./images/carree.png)
 
-### 3)  Draw points
+### 3)  Draw points ⛥
 
 For the rest, we will randomly and uniformly generate points on our figure You are already starting to get used to the
 functions I hope well. In order to separate the logic from the graphic rendering, this function will have this special
@@ -264,14 +270,222 @@ uniformly throw dots on the $ABCD$ square, then the proportion of points belongi
 circle $\left(\mathscr C\right)$ written in $ABCD$ is proportional to its area
 $\mathscr A_\text{quartDisque} = \dfrac{\pi r^2}{4}$.\
 c'est a dire:\
+\
 $\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfrac{A_\text{quartDisque}}{A_\text{square}} $\
-$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfrac{\dfrac{\pi r^2}{4}}{r^2}$
-$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \left(\dfrac{\pi r^2}{4}\right) \times \left(\dfrac{1}{r^2}\right)$
-$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfrac{\pi}{4}$
+$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfrac{\dfrac{\pi r^2}{4}}{r^2}$\
+$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \left(\dfrac{\pi r^2}{4}\right) \times \left(\dfrac{1}{r^2}\right)$\
+$\dfrac{N_\text{PointsOnTheCircle}}{N_\text{total}} ≃ \dfrac{\pi}{4}$\
 $\pi ≃ \dfrac{4 \times N_\text{PointsOnTheCircle}}{N_\text{total}}$
 
-## Running the tests
+Now, one of our aims is to find $N_\text{PointsOnTheCircle}$ and assign them a colour
+To do this, bear in mind that a point is considered to belong to a quarter circle if the distance between the centre of the circle and the point in question is less than the radius of the circle.
+the centre of the circle and the point in question is less than the radius of the circle.
+In the *non-graphical_function.py*🐍 file , we define the *calculate_distance*📏 function  which takes as its arguments
+ 02 points $P1$ and $P1$ and returns the Euclidean distance between the two points.
+```sh
+def calculate_distance(p1, p2):
+    return math.sqrt((p2[1] - p1[1]) ** 2 + (p2[0] - p1[0]) ** 2)
 
+```
+
+As the value of the distance we've just calculated isn't directly useful, we'll define another function in the same python file,
+we'll define another function in the same python file 🐍 called *is_it_in_the_circle*🤔, which this time returns a boolean value that tells us whether or not a point is on the quarter circle.
+Boolean value, this time telling us whether a point is on the quarter circle.
+you'll see the importance of this function later.
+
+
+```sh
+
+def is_it_in_the_circle(p):
+    '''
+    :param p: it is the coordinate for random point
+    :return: 0 if point is in circle and 1 if else
+    '''
+    distance = calculate_distance(p, ORIGIN_COORDINATE)
+    return 0 if distance < SIZE_OF_SQUARE * GRADUATION_INTERVAL else 1
+
+
+```
+
+It's important that this function takes only one argument, so it would be a little easier 
+to use it as an aggregation function.\
+
+If we try to integrate our new function into the main function of our program, we'll get errors due to the fact that we're using global variables.
+to correct this, we're going to create a new python file called *globals.py*, in which we'll declare all the variables that will be global to our programme
+
+
+```sh
+
+def initialize(): 
+    global ORIGIN_COORDINATE
+    global SIZE_OF_SQUARE
+    global GRADUATION_INTERVAL
+    global WIDTH
+    global HEIGHT
+    
+    WIDTH, HEIGHT = 1280, 960
+    ORIGIN_COORDINATE = (25, HEIGHT - 25)
+    GRADUATION_INTERVAL = 100
+    SIZE_OF_SQUARE = 6
+```
+Now that the global varialbles are correctly defined, it will be enough to import them to use them wherever you want.\
+As we are able to tell whether a point belongs to the circle, thanks to the function *is_it_in_the_circle*, then modify 
+the *draw_points* function to color them.\
+We can add as an argument another array named *is_in_circle* of the same size as the array of coordinate *array_of_points*
+and containing only $0$ and $1$ and then make it possible to tell if the point of the table *array_of_points* with the
+index $i$ belongs to the circle $\left(\mathscr C\right)$
+
+```sh
+
+def draw_points(array_of_points, is_in_circle, window):
+    '''
+        :param array_of_points: the array of coordinates of the points to draw
+        :param is_in_circle: the array of boolean to know if point is in circle
+        :param window: window where we can draw
+        :return: void
+        '''
+    for idx, x in enumerate(array_of_points):
+        if is_in_circle[idx] == 0:
+            pygame.draw.line(window, 'green', tuple(x), tuple(x))
+        else:
+            pygame.draw.line(window, 'orange', tuple(x), tuple(x))
+```
+
+Now let's integrate all this into our main function and observe the results. By the way, we can integrate a Little text 
+such as the total number of points, the number of points in the circle, an extimation of $\pi$ and others.\
+So our main function looks like this.
+
+```sh
+import time
+from functions import non_graphical_function, graphic_function
+import globals
+import matplotlib.pyplot as plt
+import pygame
+import math
+import numpy as np
+import sys
+from helper import core
+
+# initialize pygame
+
+pygame.init()
+globals.initialize()
+# define the windows
+
+
+window = pygame.display.set_mode((globals.WIDTH, globals.HEIGHT))
+pygame.display.set_caption('monte Carlo Simulation')
+
+run = True
+fps = 60
+clock = pygame.time.Clock()
+font = pygame.font.Font('freesansbold.ttf', 32)
+# define color of text
+white = (255, 255, 255)
+green = (0, 255, 0)
+blue = (0, 0, 128)
+
+size_of_square = 6 * globals.GRADUATION_INTERVAL
+array_of_point = np.random.randint((globals.ORIGIN_COORDINATE[0], globals.ORIGIN_COORDINATE[1] - size_of_square),
+                                           (globals.ORIGIN_COORDINATE[0] + size_of_square, globals.ORIGIN_COORDINATE[1]),
+                                           size=(globals.N_TOTAL, 2))
+
+is_in_circle = np.array(list(map(non_graphical_function.is_it_in_the_circle, array_of_point)))
+unique, counts = np.unique(is_in_circle, return_counts=True)
+value_count = dict(zip(unique, counts))
+pi_estimate = 4 * value_count[0] / globals.N_TOTAL
+if __name__ == "__main__":
+    while run:
+        # handling input
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                break
+        # update
+        # visuals
+        window.fill((20, 20, 20))
+        graphic_function.draw_coordinate_system(globals.ORIGIN_COORDINATE, globals.GRADUATION_INTERVAL, window)
+        graphic_function.draw_square_and_circle(6*globals.GRADUATION_INTERVAL, globals.ORIGIN_COORDINATE, window)
+        graphic_function.draw_points(array_of_point, is_in_circle, window)
+        text = font.render(f'Points: {value_count[0]} / {globals.N_TOTAL}', True, green, blue)
+        text_pi = font.render(f'pi ≃ {pi_estimate}', True, green, blue)
+        textRect = text.get_rect()
+        pi_textRect = text_pi.get_rect()
+        textRect.center = (globals.WIDTH - 200, 20)
+        pi_textRect.center = (globals.WIDTH - 200, 60)
+        window.blit(text, textRect)
+        window.blit(text_pi, pi_textRect)
+        # updating the windows
+        pygame.display.flip()
+        clock.tick(fps)
+    pygame.quit()
+
+```
+And as a result, we have this:
+
+![image info](./images/complete.png)
+
+The Secret of **Monte Carlo** lies in the fact that it is enough to repeat an action a number of times
+close to infinity, and the average result will be close to verity almost, surely. Our next task is 
+therefore to make loop, our result a finite number of times, but very large to approach the theory of
+**Monte Carlo**🔒
+
+To do this, we will start by defining a global variable *EPOCS* which defines the number of times we
+must iterate, then in the infinite loop of the game, we will make a block in the following order:
+- Random generation of coordinates
+- Calculates the distance between these points and the origin of the coordinate system which is the center of the circle
+- County of points within the circle
+- Make an estimate of Pi
+- Saving the Exestimer value of pi in an array
+
+Each time, we count the number of times we have executed the block and whether it is greater than or 
+equal to the value of the global variable *EPOCS* then we stop and calculate the average of the
+recorded results in the result table, and we display this average value which is the value of our $\pi$ search.\
+Let's declare our global variable in the *global.py*. For the moment it can be fixed a value of $1000$. We'll come back to that later.
+
+```sh
+ global EPOCS
+ EPOCS = 1000
+```
+
+In the main function, we define our block like this.
+```sh
+
+        if epoc < globals.EPOCS:
+            array_of_point = np.random.randint(
+                (globals.ORIGIN_COORDINATE[0], globals.ORIGIN_COORDINATE[1] - size_of_square),
+                (globals.ORIGIN_COORDINATE[0] + size_of_square, globals.ORIGIN_COORDINATE[1]),
+                size=(globals.N_TOTAL, 2))
+
+            is_in_circle = np.array(list(map(non_graphical_function.is_it_in_the_circle, array_of_point)))
+            unique, counts = np.unique(is_in_circle, return_counts=True)
+            value_count = dict(zip(unique, counts))
+            pi_estimate = 4 * value_count[0] / globals.N_TOTAL
+            array_of_pi_estimation = np.append(array_of_pi_estimation, [pi_estimate])
+        else:
+            pi = np.mean(array_of_pi_estimation)
+            text_final_pi = font.render(f'The final value of the Pi estimate is equal to {pi} almost surely', True, green, blue)
+            text_final_piRect = text_final_pi.get_rect()
+            text_final_piRect.center = (globals.WIDTH/2, globals.HEIGHT/2)
+
+```
+
+then very far at the bottom of the file, we do not forget to make a display of our text
+
+```sh
+ if epoc >= globals.EPOCS:
+            window.blit(text_final_pi, text_final_piRect)
+
+```
+The result looks like this:
+![image info](./images/peek01.gif)
+
+
+### 4)  optimization ⛥
+
+
+
+## Running the tests
 Remember this is a showcase, thus your potential employer might want to see an automated test-suite of some kind up running.
 
 ---
